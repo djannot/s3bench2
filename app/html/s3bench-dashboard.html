@@ -1,0 +1,155 @@
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-primary">
+      <div class="panel-heading center">
+        <h3 class="panel-title">Parameters</h3>
+      </div>
+      <div class="panel-body center">
+        <form name="parametersForm" ng-submit="s3bench.changestate('start')">
+          <fieldset class="form-group">
+            <input ng-model="s3bench.accesskey" type="text" class="form-control" placeholder="S3 Access Key" title="S3 Access Key" required />
+          </fieldset>
+          <fieldset class="form-group">
+            <input ng-model="s3bench.secretkey" type="text" class="form-control" placeholder="S3 Secret Key" title="S3 Secret Key" required />
+          </fieldset>
+          <fieldset class="form-group">
+            <input ng-model="s3bench.endpoint" type="text" class="form-control" placeholder="Endpoint" title="Enfpoind" required />
+          </fieldset>
+          <fieldset class="form-group">
+            <input ng-model="s3bench.bucket" type="text" class="form-control" placeholder="Bucket" title="Bucket" required />
+          </fieldset>
+          <fieldset class="form-group">
+            <input ng-model="s3bench.sample" type="text" class="form-control" placeholder="Sample" title="Sample" required />
+          </fieldset>
+          <fieldset class="form-group">
+            <input ng-model="s3bench.delay" type="text" class="form-control" placeholder="Delay (ms)" title="Delay (ms)" required />
+          </fieldset>
+          <fieldset class="form-group">
+            <input type="submit" class="btn btn-primary pull-right" value="Start" ng-disabled="s3bench.noreset" />
+          </fieldset>
+        </form>
+        <form name="stopForm" ng-submit="s3bench.changestate('stop')">
+          <fieldset class="form-group">
+            <input type="submit" class="btn btn-primary pull-right" value="Stop" ng-disabled="s3bench.noreset" />
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading center">
+        <h3 class="panel-title">List keys (response time in ms)</h3>
+      </div>
+      <div class="panel-body center">
+        <canvas id="lineListKeys" class="chart chart-line" data="s3bench.responsetime['listkeys']['data']"
+          labels="s3bench.responsetime['listkeys']['labels']" legend="true" series="s3bench.responsetime['listkeys']['series']">
+        </canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading center">
+        <h3 class="panel-title">Create new object (response time in ms)</h3>
+      </div>
+      <div class="panel-body center">
+        <canvas id="lineListKeys" class="chart chart-line" data="s3bench.responsetime['putcreate']['data']"
+          labels="s3bench.responsetime['putcreate']['labels']" legend="true" series="s3bench.responsetime['putcreate']['series']">
+        </canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading center">
+        <h3 class="panel-title">Update existing object (response time in ms)</h3>
+      </div>
+      <div class="panel-body center">
+        <canvas id="lineListKeys" class="chart chart-line" data="s3bench.responsetime['putupdate']['data']"
+          labels="s3bench.responsetime['putupdate']['labels']" legend="true" series="s3bench.responsetime['putupdate']['series']">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading center">
+        <h3 class="panel-title">Get same object (response time in ms)</h3>
+      </div>
+      <div class="panel-body center">
+        <canvas id="lineListKeys" class="chart chart-line" data="s3bench.responsetime['getsame']['data']"
+          labels="s3bench.responsetime['getsame']['labels']" legend="true" series="s3bench.responsetime['getsame']['series']">
+        </canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading center">
+        <h3 class="panel-title">Get random object (response time in ms)</h3>
+      </div>
+      <div class="panel-body center">
+        <canvas id="lineListKeys" class="chart chart-line" data="s3bench.responsetime['getrandom']['data']"
+          labels="s3bench.responsetime['getrandom']['labels']" legend="true" series="s3bench.responsetime['getrandom']['series']">
+        </canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading center">
+        <h3 class="panel-title">Delete random object (response time in ms)</h3>
+      </div>
+      <div class="panel-body center">
+        <canvas id="lineListKeys" class="chart chart-line" data="s3bench.responsetime['deleterandom']['data']"
+          labels="s3bench.responsetime['deleterandom']['labels']" legend="true" series="s3bench.responsetime['deleterandom']['series']">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <div class="panel panel-primary">
+      <div class="panel-heading center">
+        <h3 class="panel-title">Status Code</h3>
+      </div>
+      <div class="panel-body center">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Endpoint</th>
+              <th>Bucket</th>
+              <th>Timestamp</th>
+              <th>List keys</th>
+              <th>Create new object</th>
+              <th>Update existing object</th>
+              <th>Get same object</th>
+              <th>Get random object</th>
+              <th>Delete random object</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr ng-repeat="data in s3bench.statuscode">
+              <td>{{ data["endpoint"] }}</td>
+              <td>{{ data["bucket"] }}</td>
+              <td>{{ data["timestamp"] }}</td>
+              <td>{{ data["listkeys"]["statuscode"] }}</td>
+              <td>{{ data["putcreate"]["statuscode"] }}</td>
+              <td>{{ data["putupdate"]["statuscode"] }}</td>
+              <td>{{ data["getsame"]["statuscode"] }}</td>
+              <td>{{ data["getrandom"]["statuscode"] }}</td>
+              <td>{{ data["deleterandom"]["statuscode"] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
